@@ -30,9 +30,7 @@ const makeGrid = (() => {
 const fillGrid = () => {
   startButton.removeEventListener('click', fillGrid);
   const divs = document.querySelectorAll('#container>div');
-  //const array = [...Array(54)].map(_ => Math.ceil(Math.random() * 9));
-  //for debugging
-  const array = Array(54).fill(5);
+  const array = [...Array(54)].map(_ => Math.ceil(Math.random() * 9));
   array.forEach((_, i) => { divs[i].textContent = array[i]; });
   while (array.length) matrix.push(array.splice(0, 9));
   trackTime();
