@@ -1,0 +1,103 @@
+body {
+  width: 100%;
+  height: 100%;
+  background: #3D0E79;
+  color: #FFF;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-x: hidden;
+  font-family: 'Roboto Mono', monospace;
+}
+
+#modeWrapper {
+  width: 98%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+#mode {
+  border: 0;
+  color: #FFF;
+  background: none;
+  cursor: pointer;
+}
+
+#startWrapper {
+  margin: -10px auto 15px;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  width: 360px;
+}
+
+#startWrapper>button {
+  width: 50px;
+  height: 35px;
+  border-radius: 20%;
+  border: 0;
+  background: #fff;
+  cursor: pointer;
+}
+
+#startWrapper>button:active {
+  transform: scale(0.98);
+  color: #3D0E79;
+}
+
+#start {
+  display: block;
+}
+
+#pause {
+  display: none;
+}
+
+#statusWrapper {
+  width: 360px;
+  display: flex;
+  justify-content: space-between;
+  margin: 10px;
+}
+
+#statusWrapper>div>span {
+  vertical-align: top;
+}
+
+#container {
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  width: 360px;
+  height: 360px;
+  margin: 15px;
+  border: 1px solid #FFF;
+}
+
+#container>div {
+  width: 38px;
+  height: 38px;
+  font-size: 2em;
+  text-align: center;
+}
+
+#buttonWrapper {
+  margin: 15px;
+  display: flex;
+  align-items: center;
+}
+
+#buttonWrapper>button {
+  margin: 10px;
+  padding: 15px;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 0;
+  background: #fff;
+  cursor: pointer;
+}
+
+#buttonWrapper>button:active {
+  transform: scale(0.98);
+  color: #3D0E79;
+}

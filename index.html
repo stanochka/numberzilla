@@ -1,0 +1,49 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>Numberzilla</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+
+</head>
+
+<body>
+  <div id='modeWrapper'>
+    <button id='mode' value='light'><span class="material-icons">light_mode</span>
+    </button>
+  </div>
+  <h1>Numberzilla</h1>
+  <div id='startWrapper'>
+    <button id='startPause'>
+      <span id='start' class="material-icons">play_arrow</span>
+      <span id='pause' class="material-icons">pause</span>
+    </button>
+    <button id='stop'><span class="material-icons">stop</span></button>
+  </div>
+  <div id='statusWrapper'>
+    <div id='time'><span class="material-icons">timer</span> Time: <span class="timer">00:00:00</span></div>
+    <div id='points'><span class="material-icons">
+savings
+</span> Points: <span class="pointCounter">0</span></div>
+  </div>
+  <div id='container'></div>
+  <div id='buttonWrapper'>
+    <button id='add'><span class="material-icons">
+add_box
+</span><br>Add</button>
+    <button id='hint'><span class="material-icons">
+lightbulb
+</span><br>Hint</button>
+    <button id='undo'><span class="material-icons">
+undo
+</span><br>Undo</button>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
