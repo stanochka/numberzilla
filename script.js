@@ -12,9 +12,16 @@ var pointCounter = 0;
 
 //initial grid IIFE
 const makeGrid = (() => {
+  let divIDs = [];
+  for (let r=0; r<9; r++) {
+    for (let c=0; c<9; c++) {
+      divIDs.push(`${r}-${c}`);
+    };
+  };
   for (let i = 0; i < 81; i++) {
     let el = document.createElement('div');
     el.style.border = '1px solid #FFF';
+    el.id = divIDs[i];
     container.appendChild(el);
   };
 })()
@@ -26,13 +33,6 @@ const fillGrid = () => {
   const array = [...Array(54)].map(_ => Math.ceil(Math.random() * 9));
   array.forEach((_, i) => { divs[i].textContent = array[i]; });
   while (array.length) matrix.push(array.splice(0, 9));
-  let divIDs = [];
-  for (let r=0; r<matrix.length; r++) {
-    for (let c=0; c<matrix[r].length; c++) {
-      divIDs.push(`${r}-${c}`);
-    };
-  };
-  divIDs.forEach((_, i) => { divs[i].id = divIDs[i];});
   trackTime();
   trackProgress();
 }
@@ -171,11 +171,8 @@ const checkPosition = () => {
     posX[0] < posY[0] ?
     (startRow = posX[0], startCol = posX[1], endRow = posY[0], endCol = posY[1]) :
     (startRow = posY[0], startCol = posY[1], endRow = posX[0], endCol = posX[1]);
-    console.log([startRow, startCol]);
-    console.log([endRow, endCol]);
     if (startCol < 8) toCheck = toCheck.concat(matrix[startRow].slice(startCol+1));
     if (endCol > 0) toCheck = toCheck.concat(matrix[endRow].slice(0, endCol));
-    console.log(toCheck);
     if (toCheck.filter(el => el !== null).length === 0) return true;
     else return false;
   }
@@ -197,8 +194,25 @@ const removeItems = () => {
     matrix[posX[0]].splice(posX[1], 1, null);
     matrix[posY[0]].splice(posY[1], 1, null);
     chosen.length = 0;
-    //add deleting row if empty
+    checkEmptyRows();
   }, 500);
+}
+
+const checkEmptyRows = () => {
+  for (let row in matrix) {
+    if (matrix[row].every(el => el === null)) {
+      matrix.splice(row, 1);
+      //delete empty row and move up
+      const divs = document.querySelectorAll('#container>div');
+      for (let i=0; i<matrix.flat().length; i++) {
+        divs[i].textContent = matrix.flat()[i];
+      }
+      //clean last row
+      for (let i=0; i<9; i++) {
+        divs[matrix.flat().length + i].textContent = null;
+      }
+    }
+  }
 }
 
 const addPoints = () => {
@@ -235,8 +249,10 @@ function stepListener() {
 const doStep = () => {
   const divs = document.querySelectorAll('#container>div');
   divs.forEach(div => {
-    if (div.textContent) div.style.cursor = 'pointer';
-    div.addEventListener('click', stepListener);
+    if (div.textContent) {
+      div.style.cursor = 'pointer';
+      div.addEventListener('click', stepListener);
+    }
   })
 }
 
