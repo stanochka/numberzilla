@@ -30,7 +30,9 @@ const makeGrid = (() => {
 const fillGrid = () => {
   startButton.removeEventListener('click', fillGrid);
   const divs = document.querySelectorAll('#container>div');
-  const array = [...Array(54)].map(_ => Math.ceil(Math.random() * 9));
+  //const array = [...Array(54)].map(_ => Math.ceil(Math.random() * 9));
+  //for debugging
+  const array = Array(54).fill(5);
   array.forEach((_, i) => { divs[i].textContent = array[i]; });
   while (array.length) matrix.push(array.splice(0, 9));
   trackTime();
@@ -199,6 +201,40 @@ const removeItems = () => {
 }
 
 const checkEmptyRows = () => {
+  let emptyRowsN = matrix.map(row => row.every(el => el == null))
+                         .filter(row => row === true).length;
+  if (emptyRowsN === 1) {
+    for (let row in matrix) {
+      if (matrix[row].every(el => el === null)) {
+        matrix.splice(row, 1);
+        //delete 1 empty row and move up
+        const divs = document.querySelectorAll('#container>div');
+        for (let i=0; i<matrix.flat().length; i++) {
+          divs[i].textContent = matrix.flat()[i];
+        }
+        //clean last row
+        for (let i=0; i<9; i++) {
+          divs[matrix.flat().length + i].textContent = null;
+        }
+      }
+    }
+  } else if (emptyRowsN === 2) {
+    for (let row in matrix) {
+      if (matrix[row].every(el => el === null)) {
+        matrix.splice(row, 2);
+        //delete 2 empty rows and move up
+        const divs = document.querySelectorAll('#container>div');
+        for (let i=0; i<matrix.flat().length; i++) {
+          divs[i].textContent = matrix.flat()[i];
+        }
+        //clean 2 last rows
+        for (let i=0; i<18; i++) {
+          divs[matrix.flat().length + i].textContent = null;
+        }
+      }
+    }
+  }
+
   for (let row in matrix) {
     if (matrix[row].every(el => el === null)) {
       matrix.splice(row, 1);
