@@ -318,6 +318,6 @@ add.addEventListener('click', expandGrid);
 undo.addEventListener('click', undoStep);
 
 //not move window on mobile
-function BlockMove(event) {
-  event.preventDefault() ;
- }
+//function BlockMove(event) {
+//  event.preventDefault() ;
+//}
