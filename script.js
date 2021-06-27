@@ -9,7 +9,7 @@ const undo = document.querySelector('#undo');
 var matrix = [];
 var chosen = [];
 var pointCounter = 0;
-const gridRowLimit = 45;
+const gridRowLimit = 60;
 // lastStep = [removedItemsArray, deletedRowsIndex, deletedRowsN]
 // removedItemsArray = [[value1, row1-col1],[value2, row2-col2]]
 var lastStep = [null, null, 0];
@@ -125,21 +125,11 @@ const trackTime = () => {
 const trackProgress = () => {
   if (pointCounter < 0) {
     alert('Game over!');
-    resetAll();
+    document.location.reload();
   };
   if (pointCounter > 0 && matrix.flat().filter(el => el > 0).length === 0) {
     alert(`You won with score: ${pointCounter}`)
   }
-}
-
-const resetAll = () => {
-  pointCounter = 0;
-  points.textContent = pointCounter;
-  matrix.length = 0;
-  chosen.length = 0;
-  const divs = document.querySelectorAll('#container>div');
-  divs.forEach(div => div.textContent = '');
-  startButton.addEventListener('click', startGame);
 }
 
 const checkChosen = () => {
@@ -212,14 +202,6 @@ const checkEmptyRows = () => {
         lastStep.splice(1, 2, row, 1);
         //delete 1 empty row and move up
         matrix.splice(row, 1);
-        const divs = document.querySelectorAll('#container>div');
-        for (let i=0; i<matrix.flat().length; i++) {
-          divs[i].textContent = matrix.flat()[i];
-        }
-        //clean last row
-        for (let i=0; i<9; i++) {
-          divs[matrix.flat().length + i].textContent = null;
-        }
       }
     }
   } else if (emptyRowsN === 2) {
@@ -228,17 +210,17 @@ const checkEmptyRows = () => {
         lastStep.splice(1, 2, row, 2);
         //delete 2 empty rows and move up
         matrix.splice(row, 2);
-        const divs = document.querySelectorAll('#container>div');
-        for (let i=0; i<matrix.flat().length; i++) {
-          divs[i].textContent = matrix.flat()[i];
-        }
-        //clean 2 last rows
-        for (let i=0; i<18; i++) {
-          divs[matrix.flat().length + i].textContent = null;
-        }
       }
     }
   } else lastStep.splice(1, 2, null, 0);
+  //clean empty rows at the end of grid
+  if (container.childElementCount/9 > 9) {
+    while (container.childElementCount/9 > matrix.length+1) {
+      el = container.lastElementChild;
+      el.remove();
+    };
+  }
+  fillGrid();
 }
 
 const addPoints = () => {
@@ -291,18 +273,26 @@ const pauseStep = () => {
 }
 
 const expandGrid = () => {
-  //add existing numbers to matrix ignoring empty cells
-  const limit = matrix.flat().filter(el => el !== null).length/9;
-  const toFill = matrix.flat().filter(el => el !== null);
-  for (let i=0; i<limit; i++) {
-    matrix.push(toFill.splice(0, 9));
-  };
-  //expand grid to accomodate added numbers
-  const newRowsN = (matrix.flat().length - container.childElementCount)/9 + 1;
+  //add existing numbers to matrix
   const existRowsN = container.childElementCount/9;
-  makeGrid(newRowsN, existRowsN);
-  fillGrid();
-  doStep();
+  const limit = matrix.flat().filter(el => el !== null).length/9;
+  if (existRowsN+limit < gridRowLimit) {
+    const toFill = matrix.flat().filter(el => el !== null);
+    lastRow = matrix.slice(-1).flat();
+    if (lastRow.length < 9) {
+      lastRow = lastRow.concat(Array(9-lastRow.length).fill(null));
+      matrix.splice(-1, 1, lastRow);
+    }
+    for (let i=0; i<limit; i++) {
+      matrix.push(toFill.splice(0, 9));
+    };
+    console.table(matrix);
+    makeGrid(limit + 1, existRowsN);
+    fillGrid();
+    checkEmptyRows();
+    doStep();
+  //TODO: add changing button to shuffle
+  } else alert('Grid size limit reached!');
 }
 
 const undoStep = () => {
