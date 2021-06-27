@@ -9,30 +9,33 @@ const undo = document.querySelector('#undo');
 var matrix = [];
 var chosen = [];
 var pointCounter = 0;
-const gridSizeLimit = 45;
+const gridRowLimit = 45;
+// lastStep = [removedItemsArray, deletedRowsIndex, deletedRowsN]
+// removedItemsArray = [[value1, row1-col1],[value2, row2-col2]]
+var lastStep = [null, null, 0];
 
-//initial grid IIFE
-const makeGrid = (() => {
+const makeGrid = (newRowsN, existRowsN) => {
   let divIDs = [];
-  for (let r=0; r<9; r++) {
+  for (let r=existRowsN; r<existRowsN+newRowsN; r++) {
     for (let c=0; c<9; c++) {
       divIDs.push(`${r}-${c}`);
     };
   };
-  for (let i = 0; i < 81; i++) {
+  for (let i = 0; i < divIDs.length; i++) {
     let el = document.createElement('div');
     el.style.border = '1px solid #FFF';
     el.id = divIDs[i];
     container.appendChild(el);
   };
-})()
+}
+
+makeGrid(9, 0); //default 9 rows
 
 const fillGrid = () => {
   const divs = document.querySelectorAll('#container>div');
   divs.forEach((div, i) => div.textContent = matrix.flat()[i]);
 }
 
-//initial numbers upon starting game
 const startGame = () => {
   startButton.removeEventListener('click', startGame);
   let array = [...Array(54)].map(_ => Math.ceil(Math.random() * 9));
@@ -125,7 +128,6 @@ const trackTime = () => {
 
 const trackProgress = () => {
   if (pointCounter < 0) {
-    //TODO: add condition if gridSize exceeded
     alert('Game over!');
     resetAll();
   };
@@ -185,6 +187,8 @@ const checkPosition = () => {
 }
 
 const removeItems = () => {
+  let removedItemsArray = chosen.slice(0);
+  lastStep.splice(0, 1, removedItemsArray);
   const divs = document.querySelectorAll('#container>div');
   setTimeout(() => {
     divs.forEach(div => {
@@ -209,8 +213,9 @@ const checkEmptyRows = () => {
   if (emptyRowsN === 1) {
     for (let row in matrix) {
       if (matrix[row].every(el => el === null)) {
-        matrix.splice(row, 1);
+        lastStep.splice(1, 2, row, 1);
         //delete 1 empty row and move up
+        matrix.splice(row, 1);
         const divs = document.querySelectorAll('#container>div');
         for (let i=0; i<matrix.flat().length; i++) {
           divs[i].textContent = matrix.flat()[i];
@@ -224,8 +229,9 @@ const checkEmptyRows = () => {
   } else if (emptyRowsN === 2) {
     for (let row in matrix) {
       if (matrix[row].every(el => el === null)) {
-        matrix.splice(row, 2);
+        lastStep.splice(1, 2, row, 2);
         //delete 2 empty rows and move up
+        matrix.splice(row, 2);
         const divs = document.querySelectorAll('#container>div');
         for (let i=0; i<matrix.flat().length; i++) {
           divs[i].textContent = matrix.flat()[i];
@@ -236,7 +242,7 @@ const checkEmptyRows = () => {
         }
       }
     }
-  }
+  } else lastStep.splice(1, 2, null, 0);
 }
 
 const addPoints = () => {
@@ -296,33 +302,31 @@ const expandGrid = () => {
     matrix.push(toFill.splice(0, 9));
   };
   //expand grid to accomodate added numbers
-  //TODO: fix bug with last row not 9 cols
   const newRowsN = (matrix.flat().length - container.childElementCount)/9 + 1;
   const existRowsN = container.childElementCount/9;
-  let divIDs = [];
-  for (let r=existRowsN; r<existRowsN+newRowsN; r++) {
-    for (let c=0; c<9; c++) {
-      divIDs.push(`${r}-${c}`);
-    };
-  };
-  for (let i = 0; i < newRowsN*9; i++) {
-    let el = document.createElement('div');
-    el.style.border = '1px solid #FFF';
-    el.id = divIDs[i];
-    container.appendChild(el);
-  };
+  makeGrid(newRowsN, existRowsN);
   fillGrid();
   doStep();
 }
 
 const undoStep = () => {
-  //TODO: restore deleted divs (add to matrix and render again)
-  //pointCounter -= 8;
-  //points.textContent = pointCounter;
+  if (lastStep[0] !== null) {
+    confirm("Are you sure? You'll lose 8 points");
+    let posX = [+lastStep[0][0][1].match(/^\d+/)[0], +lastStep[0][0][1].match(/\d+$/)[0]];
+    let posY = [+lastStep[0][1][1].match(/^\d+/)[0], +lastStep[0][1][1].match(/\d+$/)[0]];
+    if (lastStep[2] === 1) matrix.splice(lastStep[1], 0, Array(9).fill(null));
+    else if (lastStep[2] === 2) matrix.splice(lastStep[1], 0, Array(9).fill(null), Array(9).fill(null));
+    matrix[posX[0]].splice(posX[1], 1, +lastStep[0][0][0]);
+    matrix[posY[0]].splice(posY[1], 1, +lastStep[0][1][0]);
+    fillGrid();
+    lastStep = [null, null, 0];
+    pointCounter -= 8;
+    points.textContent = pointCounter;
+  } else alert('Cannot use this option!');
 }
 
 mode.addEventListener('click', changeMode);
 startButton.addEventListener('click', startGame);
 add.addEventListener('click', expandGrid);
 //hint.addEventListener('click', getHint);
-//undo.addEventListener('click', undoStep);
+undo.addEventListener('click', undoStep);
