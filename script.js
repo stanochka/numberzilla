@@ -316,8 +316,3 @@ startButton.addEventListener('click', startGame);
 add.addEventListener('click', expandGrid);
 //hint.addEventListener('click', getHint);
 undo.addEventListener('click', undoStep);
-
-//not move window on mobile
-//function BlockMove(event) {
-//  event.preventDefault() ;
-//}
