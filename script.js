@@ -100,11 +100,7 @@ const trackTime = () => {
 
   function stop() {
     confirm('Are you sure? All progress will be lost');
-    clearInterval(timerInterval);
-    timer.textContent = '00:00:00';
-    elapsedTime = 0;
-    showButton("PLAY");
-    resetAll();
+    document.location.reload();
   }
 
   function showButton(buttonKey) {
@@ -312,10 +308,12 @@ const expandGrid = () => {
 const undoStep = () => {
   if (lastStep[0] !== null) {
     confirm("Are you sure? You'll lose 8 points");
-    let posX = [+lastStep[0][0][1].match(/^\d+/)[0], +lastStep[0][0][1].match(/\d+$/)[0]];
-    let posY = [+lastStep[0][1][1].match(/^\d+/)[0], +lastStep[0][1][1].match(/\d+$/)[0]];
+    //restore removed empty rows if any
     if (lastStep[2] === 1) matrix.splice(lastStep[1], 0, Array(9).fill(null));
     else if (lastStep[2] === 2) matrix.splice(lastStep[1], 0, Array(9).fill(null), Array(9).fill(null));
+    //restore removed items
+    let posX = [+lastStep[0][0][1].match(/^\d+/)[0], +lastStep[0][0][1].match(/\d+$/)[0]];
+    let posY = [+lastStep[0][1][1].match(/^\d+/)[0], +lastStep[0][1][1].match(/\d+$/)[0]];
     matrix[posX[0]].splice(posX[1], 1, +lastStep[0][0][0]);
     matrix[posY[0]].splice(posY[1], 1, +lastStep[0][1][0]);
     fillGrid();
