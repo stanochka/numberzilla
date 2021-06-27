@@ -46,7 +46,7 @@ const startGame = () => {
 
 const changeMode = () => {
   if (mode.value === 'light') {
-    body.style.background = '#D9CEED';
+    body.style.background = '#D0C7FF';
     body.style.color = '#000';
     mode.value = 'dark';
     mode.innerHTML = '<span class="material-icons">dark_mode</span>';
