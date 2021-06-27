@@ -42,7 +42,6 @@ const startGame = () => {
   while (array.length) matrix.push(array.splice(0, 9));
   fillGrid();
   trackTime();
-  trackProgress();
 }
 
 const changeMode = () => {
@@ -84,7 +83,7 @@ const trackTime = () => {
 
   function start() {
     startTime = Date.now() - elapsedTime;
-    timerInterval = setInterval(function printTime() {
+    timerInterval = setInterval(() => {
       elapsedTime = Date.now() - startTime;
       timer.textContent = timeToString(elapsedTime);
     }, 10);
@@ -122,7 +121,7 @@ const trackTime = () => {
   start();
 }
 
-const trackProgress = () => {
+const checkProgress = () => {
   if (pointCounter < 0) {
     alert('Game over!');
     document.location.reload();
@@ -190,6 +189,7 @@ const removeItems = () => {
     matrix[posY[0]].splice(posY[1], 1, null);
     chosen.length = 0;
     checkEmptyRows();
+    checkProgress();
   }, 500);
 }
 
@@ -221,6 +221,7 @@ const checkEmptyRows = () => {
     };
   }
   fillGrid();
+  doStep();
 }
 
 const addPoints = () => {
@@ -273,7 +274,6 @@ const pauseStep = () => {
 }
 
 const expandGrid = () => {
-  //add existing numbers to matrix
   const existRowsN = container.childElementCount/9;
   const limit = matrix.flat().filter(el => el !== null).length/9;
   if (existRowsN+limit < gridRowLimit) {
@@ -286,11 +286,9 @@ const expandGrid = () => {
     for (let i=0; i<limit; i++) {
       matrix.push(toFill.splice(0, 9));
     };
-    console.table(matrix);
     makeGrid(limit + 1, existRowsN);
     fillGrid();
     checkEmptyRows();
-    doStep();
   //TODO: add changing button to shuffle
   } else alert('Grid size limit reached!');
 }
