@@ -135,7 +135,7 @@ body {
 
   #container {
     margin: 0;
-    -webkit-overflow-scrolling: touch;
+    -webkit-overflow-scrolling: auto;
   }
 
   #buttonWrapper {
