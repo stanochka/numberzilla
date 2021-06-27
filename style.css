@@ -68,7 +68,7 @@ body {
   display: grid;
   grid-template-columns: repeat(9, 1fr);
   width: 360px;
-  height: 360px;
+  height: auto;
   margin: 15px;
   border: 1px solid #FFF;
 }

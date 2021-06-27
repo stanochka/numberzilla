@@ -9,6 +9,7 @@ const undo = document.querySelector('#undo');
 var matrix = [];
 var chosen = [];
 var pointCounter = 0;
+const gridSizeLimit = 45;
 
 //initial grid IIFE
 const makeGrid = (() => {
@@ -26,13 +27,17 @@ const makeGrid = (() => {
   };
 })()
 
-//initial numbers upon starting game
 const fillGrid = () => {
-  startButton.removeEventListener('click', fillGrid);
   const divs = document.querySelectorAll('#container>div');
-  const array = [...Array(54)].map(_ => Math.ceil(Math.random() * 9));
-  array.forEach((_, i) => { divs[i].textContent = array[i]; });
+  divs.forEach((div, i) => div.textContent = matrix.flat()[i]);
+}
+
+//initial numbers upon starting game
+const startGame = () => {
+  startButton.removeEventListener('click', startGame);
+  let array = [...Array(54)].map(_ => Math.ceil(Math.random() * 9));
   while (array.length) matrix.push(array.splice(0, 9));
+  fillGrid();
   trackTime();
   trackProgress();
 }
@@ -91,7 +96,7 @@ const trackTime = () => {
   }
 
   function stop() {
-    confirm('Are you sure?');
+    confirm('Are you sure? All progress will be lost');
     clearInterval(timerInterval);
     timer.textContent = '00:00:00';
     elapsedTime = 0;
@@ -124,7 +129,7 @@ const trackProgress = () => {
     alert('Game over!');
     resetAll();
   };
-  if (pointCounter > 0 && matrix.flat().filter(_ => i > 0).length === 0) {
+  if (pointCounter > 0 && matrix.flat().filter(el => el > 0).length === 0) {
     alert(`You won with score: ${pointCounter}`)
   }
 }
@@ -136,7 +141,7 @@ const resetAll = () => {
   chosen.length = 0;
   const divs = document.querySelectorAll('#container>div');
   divs.forEach(div => div.textContent = '');
-  startButton.addEventListener('click', fillGrid);
+  startButton.addEventListener('click', startGame);
 }
 
 const checkChosen = () => {
@@ -232,21 +237,6 @@ const checkEmptyRows = () => {
       }
     }
   }
-
-  for (let row in matrix) {
-    if (matrix[row].every(el => el === null)) {
-      matrix.splice(row, 1);
-      //delete empty row and move up
-      const divs = document.querySelectorAll('#container>div');
-      for (let i=0; i<matrix.flat().length; i++) {
-        divs[i].textContent = matrix.flat()[i];
-      }
-      //clean last row
-      for (let i=0; i<9; i++) {
-        divs[matrix.flat().length + i].textContent = null;
-      }
-    }
-  }
 }
 
 const addPoints = () => {
@@ -299,8 +289,30 @@ const pauseStep = () => {
 }
 
 const expandGrid = () => {
-  //TODO: add rows for (let i=0; i<matrix.flat().length/9; i++);
-  //TODO: fill new rows with matrix.flat()
+  //add existing numbers to matrix ignoring empty cells
+  const limit = matrix.flat().filter(el => el !== null).length/9;
+  const toFill = matrix.flat().filter(el => el !== null);
+  for (let i=0; i<limit; i++) {
+    matrix.push(toFill.splice(0, 9));
+  };
+  //expand grid to accomodate added numbers
+  //TODO: fix bug with last row not 9 cols
+  const newRowsN = (matrix.flat().length - container.childElementCount)/9 + 1;
+  const existRowsN = container.childElementCount/9;
+  let divIDs = [];
+  for (let r=existRowsN; r<existRowsN+newRowsN; r++) {
+    for (let c=0; c<9; c++) {
+      divIDs.push(`${r}-${c}`);
+    };
+  };
+  for (let i = 0; i < newRowsN*9; i++) {
+    let el = document.createElement('div');
+    el.style.border = '1px solid #FFF';
+    el.id = divIDs[i];
+    container.appendChild(el);
+  };
+  fillGrid();
+  doStep();
 }
 
 const undoStep = () => {
@@ -310,7 +322,7 @@ const undoStep = () => {
 }
 
 mode.addEventListener('click', changeMode);
-startButton.addEventListener('click', fillGrid);
-//add.addEventListener('click', expandGrid);
+startButton.addEventListener('click', startGame);
+add.addEventListener('click', expandGrid);
 //hint.addEventListener('click', getHint);
 //undo.addEventListener('click', undoStep);
