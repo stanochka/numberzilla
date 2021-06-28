@@ -296,9 +296,10 @@ const expandGrid = () => {
       toFill.unshift(...lastRow);
       matrix.splice(-1, 1);
     }
-    if (lastRow.includes(null)) {
+    //TODO: need debugging
+    else if (lastRow.includes(null)) {
       let i = lastRow.reverse().findIndex(el => el !== null);
-      lastRow.splice(0, Math.abs(i));
+      lastRow.splice(0, i);
       lastRow.reverse();
       toFill.unshift(...lastRow);
       matrix.splice(-1, 1);
