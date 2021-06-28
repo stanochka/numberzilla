@@ -2,10 +2,15 @@ const body = document.querySelector('body');
 const container = document.querySelector('#container');
 const mode = document.querySelector('#mode')
 const startButton = document.querySelector('#start');
+const pauseButton = document.querySelector('#pause');
+const pauseMessage = document.querySelector('#pauseMessage');
+const stopButton = document.querySelector('#stop');
+const timer = document.querySelector('#time>.timer');
 const points = document.querySelector('#points>.pointCounter')
 const add = document.querySelector('#add');
 const hint = document.querySelector('#hint');
 const undo = document.querySelector('#undo');
+
 var matrix = [];
 var chosen = [];
 var pointCounter = 0;
@@ -88,17 +93,19 @@ const trackTime = () => {
       timer.textContent = timeToString(elapsedTime);
     }, 10);
     showButton("PAUSE");
+    pauseMessage.style.display = "none";
     doStep();
   }
 
   function pause() {
     clearInterval(timerInterval);
     showButton("PLAY");
+    pauseMessage.style.display = "block";
     pauseStep();
   }
 
   function stop() {
-    confirm('Are you sure? All progress will be lost');
+    if (confirm('Are you sure? All progress will be lost'))
     document.location.reload();
   }
 
@@ -108,11 +115,6 @@ const trackTime = () => {
     buttonToShow.style.display = "block";
     buttonToHide.style.display = "none";
   }
-
-  const startButton = document.querySelector('#start');
-  const pauseButton = document.querySelector('#pause');
-  const stopButton = document.querySelector('#stop');
-  const timer = document.querySelector('#time>.timer');
 
   startButton.addEventListener("click", start);
   pauseButton.addEventListener("click", pause);
@@ -200,7 +202,6 @@ const checkEmptyRows = () => {
     for (let row in matrix) {
       if (matrix[row].every(el => el === null)) {
         lastStep.splice(1, 2, row, 1);
-        //delete 1 empty row and move up
         matrix.splice(row, 1);
       }
     }
@@ -208,7 +209,6 @@ const checkEmptyRows = () => {
     for (let row in matrix) {
       if (matrix[row].every(el => el === null)) {
         lastStep.splice(1, 2, row, 2);
-        //delete 2 empty rows and move up
         matrix.splice(row, 2);
       }
     }
@@ -263,6 +263,9 @@ const doStep = () => {
       div.addEventListener('click', stepListener);
     }
   })
+  add.addEventListener('click', expandGrid);
+  //hint.addEventListener('click', getHint);
+  undo.addEventListener('click', undoStep);
 }
 
 const pauseStep = () => {
@@ -271,6 +274,9 @@ const pauseStep = () => {
     div.style.cursor = '';
     div.removeEventListener('click', stepListener) ;
   });
+  add.removeEventListener('click', expandGrid);
+  //hint.removeEventListener('click', getHint);
+  undo.removeEventListener('click', undoStep);
 }
 
 const expandGrid = () => {
@@ -280,13 +286,13 @@ const expandGrid = () => {
     const toFill = matrix.flat().filter(el => el !== null);
     lastRow = matrix.slice(-1).flat();
     if (lastRow.length < 9) {
-      lastRow = lastRow.concat(Array(9-lastRow.length).fill(null));
-      matrix.splice(-1, 1, lastRow);
+      toFill.unshift(...lastRow);
+      matrix.splice(-1, 1);
     }
     for (let i=0; i<limit; i++) {
       matrix.push(toFill.splice(0, 9));
     };
-    makeGrid(limit + 1, existRowsN);
+    if (limit > 9) makeGrid(limit, existRowsN); else makeGrid(9, existRowsN);
     fillGrid();
     checkEmptyRows();
   //TODO: add changing button to shuffle
@@ -313,6 +319,10 @@ const undoStep = () => {
 
 mode.addEventListener('click', changeMode);
 startButton.addEventListener('click', startGame);
-add.addEventListener('click', expandGrid);
-//hint.addEventListener('click', getHint);
-undo.addEventListener('click', undoStep);
+
+document.addEventListener("visibilitychange", function() {
+  if (document.visibilityState === 'hidden') {
+    console.log('Hidden!')
+    pauseButton.click();
+  }
+});

@@ -79,6 +79,26 @@ body {
   text-align: center;
 }
 
+#pauseMessage {
+  background: #B98EFF;
+  border: 1px solid #FFF;
+  border-radius: 5px;
+  width: 300px;
+  height: 80px;
+  color: #000;
+  position: absolute;
+  margin: 35vh auto;
+  text-align: center;
+  font-size: 1.1em;
+  padding: 30px 0 20px;
+  display: none;
+}
+
+#pauseMessage>span {
+  vertical-align: middle;
+}
+
+
 #buttonWrapper {
   margin: 15px;
   display: flex;
