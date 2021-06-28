@@ -378,7 +378,7 @@ const getHint = () => {
   let hintItems;
   //which hint to show
   if (matchIndH.length>0 && matchIndV.length>0) {
-    hintItems = matchIndH[0] < matchIndV[0] ? matchIndH : matchIndV;
+    hintItems = matchIndH[0] <= matchIndV[0] ? matchIndH : matchIndV;
   }
   else if (matchIndH.length !== 0) hintItems = matchIndH;
   else if (matchIndV.length !== 0) hintItems = matchIndV;
