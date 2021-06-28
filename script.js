@@ -286,8 +286,15 @@ const expandGrid = () => {
   const limit = matrix.flat().filter(el => el !== null).length/9;
   if (existRowsN+limit < gridRowLimit) {
     const toFill = matrix.flat().filter(el => el !== null);
-    lastRow = matrix.slice(-1).flat();
+    let lastRow = matrix.slice(-1).flat();
     if (lastRow.length < 9) {
+      toFill.unshift(...lastRow);
+      matrix.splice(-1, 1);
+    }
+    if (lastRow.includes(null)) {
+      let i = lastRow.reverse().findIndex(el => el !== null);
+      lastRow.splice(0, Math.abs(i));
+      lastRow.reverse();
       toFill.unshift(...lastRow);
       matrix.splice(-1, 1);
     }
@@ -301,7 +308,8 @@ const expandGrid = () => {
 }
 
 const shuffleGrid = () => {
-  let shuffled = matrix.flat().map((el) => ({sortkey: Math.random(), value: el}))
+  let shuffled = matrix.flat().filter(el => el !== null)
+                              .map((el) => ({sortkey: Math.random(), value: el}))
                               .sort((a, b) => a.sortkey - b.sortkey)
                               .map((el) => el.value);
   matrix.length = 0;
