@@ -181,6 +181,7 @@ const removeItems = () => {
   setTimeout(() => {
     divs.forEach(div => {
       if (div.id ===chosen[0][1] || div.id ===chosen[1][1]) {
+        div.style.boxShadow = '';
         div.textContent = '';
         div.style.background = '';
         div.style.cursor = '';
@@ -242,7 +243,10 @@ function stepListener() {
         } else {
           const divs = document.querySelectorAll('#container>div');
           setTimeout(() => {
-            divs.forEach(div => div.style.background = '');
+            divs.forEach(div => {
+              div.style.background = '' ;
+              div.style.boxShadow = '';
+            });
             }, 500);
           chosen.length = 0;
         }
@@ -265,7 +269,7 @@ const doStep = () => {
   })
   add.addEventListener('click', expandGrid);
   shuffle.addEventListener('click', shuffleGrid);
-  //hint.addEventListener('click', getHint);
+  hint.addEventListener('click', getHint);
   undo.addEventListener('click', undoStep);
 }
 
@@ -277,7 +281,7 @@ const pauseStep = () => {
   });
   add.removeEventListener('click', expandGrid);
   shuffle.addEventListener('click', shuffleGrid);
-  //hint.removeEventListener('click', getHint);
+  hint.removeEventListener('click', getHint);
   undo.removeEventListener('click', undoStep);
 }
 
@@ -325,6 +329,37 @@ const showButton = (buttonKey) => {
   const buttonToHide = buttonKey === "SHUFFLE" ? add : shuffle;
   buttonToShow.style.display = "block";
   buttonToHide.style.display = "none";
+}
+
+const getHint = () => {
+  let matchingInd = [];
+  //horisontal check
+  let offset = 1;
+  for (let i=0; i+offset<matrix.flat().length; i++) {
+    if (matrix.flat()[i+offset] === null) {
+    	do {
+        offset = offset + 1;
+  		} while (matrix.flat()[i+offset] === null);
+    }
+    if ( matrix.flat()[i]+matrix.flat()[i+offset] === 10
+      || matrix.flat()[i]===matrix.flat()[i+offset] ) {
+      matchingInd = [i, i+offset];
+      break;
+    }
+    offset = 1;
+  }
+  if (matchingInd.length>0) {
+    console.log(matchingInd)
+    showHint();
+    pointCounter -= 8;
+    points.textContent = pointCounter;
+  }
+  //TODO: vertical check
+
+  function showHint() {
+    const divs = document.querySelectorAll('#container>div');
+    matchingInd.forEach(i => divs[i].style.boxShadow = '0 0 0 3px rgb(28, 246, 200) inset');
+  }
 }
 
 const undoStep = () => {

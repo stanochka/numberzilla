@@ -129,10 +129,10 @@ body {
   display: none;
 }
 
-/* temportary hidden while hint function not working*/
+/* temportary hidden while hint function not working
 #hint {
   display: none;
-}
+}*/
 
 #buttonWrapper>button:active {
   transform: scale(0.98);
