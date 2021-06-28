@@ -126,11 +126,11 @@ const trackTime = () => {
 
 const checkProgress = () => {
   if (pointCounter < 0) {
-    alert('Game over!');
+    alert('Game over! You lost all the points');
     document.location.reload();
   };
-  if (pointCounter > 0 && matrix.flat().filter(el => el > 0).length === 0) {
-    alert(`You won with score: ${pointCounter}`)
+  if (pointCounter > 0 && matrix.flat().filter(el => el !== null).length === 0) {
+    alert(`You won with score: ${pointCounter}!`)
   }
 }
 
@@ -286,6 +286,7 @@ const pauseStep = () => {
 }
 
 const expandGrid = () => {
+  lastStep = [null, null, 0];
   const existRowsN = container.childElementCount/9;
   const limit = matrix.flat().filter(el => el !== null).length/9;
   if (existRowsN+limit < gridRowLimit) {
@@ -312,6 +313,7 @@ const expandGrid = () => {
 }
 
 const shuffleGrid = () => {
+  lastStep = [null, null, 0];
   let shuffled = matrix.flat().filter(el => el !== null)
                               .map((el) => ({sortkey: Math.random(), value: el}))
                               .sort((a, b) => a.sortkey - b.sortkey)
@@ -332,8 +334,9 @@ const showButton = (buttonKey) => {
 }
 
 const getHint = () => {
-  let matchingInd = [];
-  //horisontal check
+  let matchIndH = [];
+  let matchIndV = [];
+  //horisontal check (+next in line)
   let offset = 1;
   for (let i=0; i+offset<matrix.flat().length; i++) {
     if (matrix.flat()[i+offset] === null) {
@@ -343,26 +346,60 @@ const getHint = () => {
     }
     if ( matrix.flat()[i]+matrix.flat()[i+offset] === 10
       || matrix.flat()[i]===matrix.flat()[i+offset] ) {
-      matchingInd = [i, i+offset];
+      matchIndH = [i, i+offset];
       break;
     }
     offset = 1;
   }
-  if (matchingInd.length>0) {
-    console.log(matchingInd)
+  //vertical check
+  let temp = [];
+  for (let r = 0; r < matrix.length; r++) {
+      for (let c = 0; c < matrix[0].length; c++) {
+          if (temp[c] === undefined) temp[c] = [];
+          temp[c][r] = matrix[r][c];
+      }
+  }
+  offset = 1;
+  for (let c=0; c<matrix[0].length; c++) {
+    for (let r=0; r+offset<matrix.length; r++) {
+      if (temp[c][r+offset] === null) {
+        do {
+          offset = offset + 1;
+        } while (temp[c][r+offset] === null);
+      }
+      if (temp[c][r]+temp[c][r+offset] === 10 || temp[c][r]===temp[c][r+offset]) {
+        matchIndV = [[r, c], [r+offset, c]].map(el => el[0]*matrix[0].length+el[1]);
+        break;
+      }
+      offset = 1;
+    }
+    if (matchIndV.length > 0) break;
+  }
+  let hintItems;
+  //which hint to show
+  if (matchIndH.length>0 && matchIndV.length>0) {
+    hintItems = matchIndH[0] < matchIndV[0] ? matchIndH : matchIndV;
+  }
+  else if (matchIndH.length !== 0) hintItems = matchIndH;
+  else if (matchIndV.length !== 0) hintItems = matchIndV;
+  else hintItems = null;
+  //show hint
+  if (hintItems !== null) {
     showHint();
     pointCounter -= 8;
     points.textContent = pointCounter;
+    checkProgress();
   }
-  //TODO: vertical check
+  else alert('No possible matches! Add more numbers or shuffle')
 
   function showHint() {
     const divs = document.querySelectorAll('#container>div');
-    matchingInd.forEach(i => divs[i].style.boxShadow = '0 0 0 3px rgb(28, 246, 200) inset');
+    hintItems.forEach(i => divs[i].style.boxShadow = '0 0 0 3px rgb(28, 246, 200) inset');
   }
 }
 
 const undoStep = () => {
+  console.log(lastStep);
   if (lastStep[0] !== null) {
     //restore removed empty rows if any
     if (lastStep[2] === 1) matrix.splice(lastStep[1], 0, Array(9).fill(null));
@@ -376,7 +413,8 @@ const undoStep = () => {
     lastStep = [null, null, 0];
     pointCounter -= 8;
     points.textContent = pointCounter;
-  } else alert('Cannot use this option!');
+    checkProgress();
+  } else alert("You can't undo!");
 }
 
 mode.addEventListener('click', changeMode);
