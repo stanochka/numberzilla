@@ -117,7 +117,9 @@ body {
     width: 375px;
     height: 667px;
     position: fixed;
-    overflow: hidden;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
   }
 
   #modeWrapper {
