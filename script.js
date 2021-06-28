@@ -294,19 +294,16 @@ const expandGrid = () => {
     let lastRow = matrix.slice(-1).flat();
     if (lastRow.length < 9) {
       toFill.unshift(...lastRow);
-      matrix.splice(-1, 1);
+      toFill.push(...matrix.splice(-1, 1).flat().filter(el => el !== null));
     }
-    //TODO: need debugging
-    else if (lastRow.includes(null)) {
+    else if (lastRow[8] === null) {
       let i = lastRow.reverse().findIndex(el => el !== null);
       lastRow.splice(0, i);
       lastRow.reverse();
       toFill.unshift(...lastRow);
-      matrix.splice(-1, 1);
+      toFill.push(...matrix.splice(-1, 1).flat().filter(el => el !== null));
     }
-    for (let i=0; i<limit; i++) {
-      matrix.push(toFill.splice(0, 9));
-    };
+    while (toFill.length) matrix.push(toFill.splice(0, 9));
     makeGrid(limit, existRowsN);
     fillGrid();
     checkEmptyRows();
@@ -400,7 +397,6 @@ const getHint = () => {
 }
 
 const undoStep = () => {
-  console.log(lastStep);
   if (lastStep[0] !== null) {
     //restore removed empty rows if any
     if (lastStep[2] === 1) matrix.splice(lastStep[1], 0, Array(9).fill(null));
