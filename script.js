@@ -181,11 +181,11 @@ const removeItems = () => {
   setTimeout(() => {
     divs.forEach(div => {
       if (div.id ===chosen[0][1] || div.id ===chosen[1][1]) {
-        div.style.boxShadow = '';
         div.textContent = '';
         div.style.background = '';
         div.style.cursor = '';
-      }
+      };
+      div.style.boxShadow = '';
     });
     let posX = [+chosen[0][1].match(/^\d+/)[0], +chosen[0][1].match(/\d+$/)[0]];
     let posY = [+chosen[1][1].match(/^\d+/)[0], +chosen[1][1].match(/\d+$/)[0]];
@@ -253,7 +253,7 @@ function stepListener() {
       }
     } else {
       const divs = document.querySelectorAll('#container>div');
-      divs.forEach(div => div.style.background = '');
+      divs.forEach(div => { div.style.background = ''; div.style.boxShadow = ''; });
       chosen.length = 0;
     }
   }
