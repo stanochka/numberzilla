@@ -321,6 +321,7 @@ const shuffleGrid = () => {
   while (container.childElementCount > 0) container.lastElementChild.remove();
   makeGrid(matrix.length, 0);
   fillGrid();
+  doStep();
   showButton('ADD');
 }
 
@@ -392,7 +393,8 @@ const getHint = () => {
 
   function showHint() {
     const divs = document.querySelectorAll('#container>div');
-    hintItems.forEach(i => divs[i].style.boxShadow = '0 0 0 3px rgb(28, 246, 200) inset');
+    hintItems.forEach(i => divs[i].style.boxShadow = '0 0 0 3px rgb(28, 246, 200) inset')
+    divs[hintItems[0]].scrollIntoView();
   }
 }
 

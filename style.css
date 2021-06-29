@@ -69,7 +69,12 @@ body {
   height: 360px;
   margin: 15px;
   border: 1px solid #FFF;
-  overflow: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+#container::-webkit-scrollbar {
+  display: none;
 }
 
 #container>div {
@@ -166,6 +171,10 @@ body {
   #container {
     margin: 0;
     -webkit-overflow-scrolling: auto;
+  }
+
+  #container::-webkit-scrollbar {
+    display: block;
   }
 
   #buttonWrapper {
