@@ -17,6 +17,6 @@ Number puzzle game.
 
 ## iOS installation
 
-Open the link in Mobile Safari, then click 'Share' button, scroll down and click 'Add to Home Screen'. You are good to go!
+Open the link in Safari, then click 'Share' button, scroll down and click 'Add to Home Screen'. You are good to go!
 
 [PLAY](https://stanochka.github.io/numberzilla/)
