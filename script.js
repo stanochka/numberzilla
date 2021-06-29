@@ -290,20 +290,21 @@ const expandGrid = () => {
   const existRowsN = container.childElementCount/9;
   const limit = matrix.flat().filter(el => el !== null).length/9;
   if (existRowsN+limit < gridRowLimit) {
+    console.table(matrix);
     const toFill = matrix.flat().filter(el => el !== null);
     let lastRow = matrix.slice(-1).flat();
-    if (lastRow.length < 9) {
-      toFill.unshift(...lastRow);
-      toFill.push(...matrix.splice(-1, 1).flat().filter(el => el !== null));
-    }
-    else if (lastRow[8] === null) {
+    if (lastRow[lastRow.length - 1] === null) {
       let i = lastRow.reverse().findIndex(el => el !== null);
       lastRow.splice(0, i);
       lastRow.reverse();
       toFill.unshift(...lastRow);
-      toFill.push(...matrix.splice(-1, 1).flat().filter(el => el !== null));
+      matrix.splice(-1, 1);
+    } else if (lastRow.length < 9) {
+      toFill.unshift(...lastRow);
+      matrix.splice(-1, 1);
     }
     while (toFill.length) matrix.push(toFill.splice(0, 9));
+    console.table(matrix);
     makeGrid(limit, existRowsN);
     fillGrid();
     checkEmptyRows();
@@ -413,6 +414,7 @@ const undoStep = () => {
     pointCounter -= 8;
     points.textContent = pointCounter;
     checkProgress();
+    doStep();
   } else alert("You can't undo!");
 }
 
