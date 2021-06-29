@@ -16,6 +16,7 @@ var matrix = [];
 var chosen = [];
 var pointCounter = 0;
 const gridRowLimit = 60;
+const NUMBER_LIMIT = 500;
 // lastStep = [removedItemsArray, deletedRowsIndex, deletedRowsN]
 // removedItemsArray = [[value1, row1-col1],[value2, row2-col2]]
 var lastStep = [null, null, 0];
@@ -51,16 +52,16 @@ const startGame = () => {
 }
 
 const changeMode = () => {
-  if (mode.value === 'light') {
+  if (mode.value === 'dark') {
     body.style.background = '#D0C7FF';
     body.style.color = '#000';
-    mode.value = 'dark';
+    mode.value = 'light';
     mode.innerHTML = '<span class="material-icons">dark_mode</span>';
     mode.style.color = '#000';
   } else {
     body.style.background = '#3D0E79';
     body.style.color = '#FFF';
-    mode.value = 'light';
+    mode.value = 'dark';
     mode.innerHTML = '<span class="material-icons">light_mode</span>';
     mode.style.color = '#FFF';
   }
@@ -106,8 +107,12 @@ const trackTime = () => {
   }
 
   function stop() {
-    if (confirm('Are you sure? All progress will be lost'))
-    document.location.reload();
+    if (confirm('Are you sure you want to stop the game?')) {
+      clearInterval(timerInterval);
+      alert(`Game over! Your score: ${pointCounter}. Time: ${timeToString(elapsedTime)}.`);
+      saveScore();
+      clearAll();
+    }
   }
 
   function showButton(buttonKey) {
@@ -122,6 +127,16 @@ const trackTime = () => {
   stopButton.addEventListener("click", stop);
 
   start();
+}
+
+const clearAll = () => {
+  matrix = [];
+  chosen = [];
+  pointCounter = 0;
+  lastStep = [null, null, 0];
+  elapsedTime = 0;
+  while (container.childElementCount > 0) container.lastElementChild.remove();
+  makeGrid(9, 0);
 }
 
 const checkProgress = () => {
@@ -193,8 +208,9 @@ const removeItems = () => {
     matrix[posY[0]].splice(posY[1], 1, null);
     chosen.length = 0;
     checkEmptyRows();
+    checkNumberLimit();
     checkProgress();
-  }, 500);
+  }, 400);
 }
 
 const checkEmptyRows = () => {
@@ -227,7 +243,7 @@ const checkEmptyRows = () => {
 
 const addPoints = () => {
     pointCounter += 5;
-    points.textContent = pointCounter;
+    setTimeout(() => { points.textContent = pointCounter; }, 400);
 }
 
 function stepListener() {
@@ -247,7 +263,7 @@ function stepListener() {
               div.style.background = '' ;
               div.style.boxShadow = '';
             });
-            }, 500);
+          }, 400);
           chosen.length = 0;
         }
       }
@@ -289,26 +305,23 @@ const expandGrid = () => {
   lastStep = [null, null, 0];
   const existRowsN = container.childElementCount/9;
   const limit = matrix.flat().filter(el => el !== null).length/9;
-  if (existRowsN+limit < gridRowLimit) {
-    console.table(matrix);
-    const toFill = matrix.flat().filter(el => el !== null);
-    let lastRow = matrix.slice(-1).flat();
-    if (lastRow[lastRow.length - 1] === null) {
-      let i = lastRow.reverse().findIndex(el => el !== null);
-      lastRow.splice(0, i);
-      lastRow.reverse();
-      toFill.unshift(...lastRow);
-      matrix.splice(-1, 1);
-    } else if (lastRow.length < 9) {
-      toFill.unshift(...lastRow);
-      matrix.splice(-1, 1);
-    }
-    while (toFill.length) matrix.push(toFill.splice(0, 9));
-    console.table(matrix);
-    makeGrid(limit, existRowsN);
-    fillGrid();
-    checkEmptyRows();
-  } else showButton('SHUFFLE');
+  const toFill = matrix.flat().filter(el => el !== null);
+  let lastRow = matrix.slice(-1).flat();
+  if (lastRow[lastRow.length - 1] === null) {
+    let i = lastRow.reverse().findIndex(el => el !== null);
+    lastRow.splice(0, i);
+    lastRow.reverse();
+    toFill.unshift(...lastRow);
+    matrix.splice(-1, 1);
+  } else if (lastRow.length < 9) {
+    toFill.unshift(...lastRow);
+    matrix.splice(-1, 1);
+  }
+  while (toFill.length) matrix.push(toFill.splice(0, 9));
+  makeGrid(limit, existRowsN);
+  fillGrid();
+  checkEmptyRows();
+  checkNumberLimit();
 }
 
 const shuffleGrid = () => {
@@ -322,8 +335,9 @@ const shuffleGrid = () => {
   while (container.childElementCount > 0) container.lastElementChild.remove();
   makeGrid(matrix.length, 0);
   fillGrid();
+  checkEmptyRows();
+  checkNumberLimit();
   doStep();
-  showButton('ADD');
 }
 
 const showButton = (buttonKey) => {
@@ -331,6 +345,11 @@ const showButton = (buttonKey) => {
   const buttonToHide = buttonKey === "SHUFFLE" ? add : shuffle;
   buttonToShow.style.display = "block";
   buttonToHide.style.display = "none";
+}
+
+const checkNumberLimit = () => {
+  matrix.flat().filter(el => el !== null).length < NUMBER_LIMIT ?
+  showButton('ADD') : showButton('SHUFFLE');
 }
 
 const getHint = () => {
@@ -387,7 +406,7 @@ const getHint = () => {
   if (hintItems !== null) {
     showHint();
     pointCounter -= 8;
-    points.textContent = pointCounter;
+    setTimeout(() => { points.textContent = pointCounter; }, 400);
     checkProgress();
   }
   else alert('No possible matches! Add more numbers or shuffle')
@@ -412,10 +431,10 @@ const undoStep = () => {
     fillGrid();
     lastStep = [null, null, 0];
     pointCounter -= 8;
-    points.textContent = pointCounter;
+    setTimeout(() => { points.textContent = pointCounter; }, 400);
     checkProgress();
     doStep();
-  } else alert("You can't undo!");
+  } else alert('You cannot undo!')
 }
 
 mode.addEventListener('click', changeMode);
@@ -426,3 +445,12 @@ document.addEventListener("visibilitychange", function() {
     pauseButton.click();
   }
 });
+
+const saveScore = () => {
+  const savedScores = localStorage.getItem('highscore') || '[]';
+  console.log(savedScores);
+  const highscores = [...JSON.parse(savedScores), pointCounter]
+                      .sort((a, b) => b-a)
+                      .slice(0, 5);
+  localStorage.setItem('highscore', JSON.stringify(highscores));
+}
