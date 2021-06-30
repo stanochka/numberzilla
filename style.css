@@ -223,11 +223,11 @@ a {
   }
 
   #topWrapper {
-    margin: 5px 0 0;
+    margin: 0;
   }
 
   h1 {
-    margin: 7px auto;
+    margin: -5px auto 7px;
   }
 
   #startWrapper {
@@ -251,6 +251,7 @@ a {
 
   .modal-content {
     width: 80vw;
+    font-size: 0.9em;
     height: auto;
   }
 
