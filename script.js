@@ -113,7 +113,6 @@ const trackTime = () => {
   function stop() {
     if (confirm('Are you sure you want to stop the game?')) {
       clearInterval(timerInterval);
-      var time = timeToString(elapsedTime);
       alert(`Game over! Your score: ${pointCounter}. Time: ${timeToString(elapsedTime)}.`);
       saveScore();
       clearAll();
