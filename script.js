@@ -133,10 +133,13 @@ const clearAll = () => {
   matrix = [];
   chosen = [];
   pointCounter = 0;
+  points.textContent = pointCounter;
   lastStep = [null, null, 0];
   elapsedTime = 0;
+  timer.textContent = '00:00:00';
   while (container.childElementCount > 0) container.lastElementChild.remove();
   makeGrid(9, 0);
+  pauseStep();
 }
 
 const checkProgress = () => {
