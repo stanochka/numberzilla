@@ -58,14 +58,16 @@ const changeMode = () => {
     body.style.color = '#000';
     mode.value = 'light';
     mode.innerHTML = '<span class="material-icons">dark_mode</span>';
-    document.querySelectorAll('#modeWrapper>a').forEach(item => item.style.color = '#000');
+    mode.style.color = '#000';
+    document.querySelectorAll('a').forEach(item => item.style.color = '#000');
 
   } else {
     body.style.background = '#3D0E79';
     body.style.color = '#FFF';
     mode.value = 'dark';
     mode.innerHTML = '<span class="material-icons">light_mode</span>';
-    document.querySelectorAll('#modeWrapper>a').forEach(item => item.style.color = '#FFF');
+    mode.style.color = '#FFF';
+    document.querySelectorAll('#topWrapper>a').forEach(item => item.style.color = '#FFF');
   }
 }
 
@@ -419,7 +421,7 @@ const getHint = () => {
   function showHint() {
     const divs = document.querySelectorAll('#container>div');
     hintItems.forEach(i => divs[i].style.boxShadow = '0 0 0 3px rgb(28, 246, 200) inset')
-    divs[hintItems[0]].scrollIntoView();
+    divs[hintItems[0]].scrollIntoView({ behavior: 'smooth' });
   }
 }
 
