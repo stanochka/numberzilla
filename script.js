@@ -1,6 +1,7 @@
 const body = document.querySelector('body');
 const container = document.querySelector('#container');
-const mode = document.querySelector('#mode')
+const mode = document.querySelector('#mode');
+const highscoreList = document.querySelector('#highscoreList')
 const startButton = document.querySelector('#start');
 const pauseButton = document.querySelector('#pause');
 const pauseMessage = document.querySelector('#pauseMessage');
@@ -57,13 +58,14 @@ const changeMode = () => {
     body.style.color = '#000';
     mode.value = 'light';
     mode.innerHTML = '<span class="material-icons">dark_mode</span>';
-    mode.style.color = '#000';
+    document.querySelectorAll('#modeWrapper>a').forEach(item => item.style.color = '#000');
+
   } else {
     body.style.background = '#3D0E79';
     body.style.color = '#FFF';
     mode.value = 'dark';
     mode.innerHTML = '<span class="material-icons">light_mode</span>';
-    mode.style.color = '#FFF';
+    document.querySelectorAll('#modeWrapper>a').forEach(item => item.style.color = '#FFF');
   }
 }
 
@@ -451,9 +453,15 @@ document.addEventListener("visibilitychange", function() {
 
 const saveScore = () => {
   const savedScores = localStorage.getItem('highscore') || '[]';
-  console.log(savedScores);
   const highscores = [...JSON.parse(savedScores), pointCounter]
                       .sort((a, b) => b-a)
                       .slice(0, 5);
   localStorage.setItem('highscore', JSON.stringify(highscores));
+  while (highscoreList.childElementCount > 0) highscoreList.lastElementChild.remove();
+  highscores.foreach(score => {
+    let li = document.createElement("li");
+    li.appendChild(document.createTextNode(score));
+    console.log(li);
+    highScoreList.appendChild(li);
+  });
 }

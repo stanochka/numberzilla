@@ -12,10 +12,11 @@
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
 </head>
 
-<body ontouchstart=''>
-  <div id='modeWrapper'>
-    <button id='mode' value='dark'><span class="material-icons">light_mode</span>
-    </button>
+<body>
+  <div id='topWrapper'>
+    <a href='#rules'><span class="material-icons">help_center</span></a>
+    <a href='#best'><span class="material-icons">star</span></a>
+    <div id='modeWrapper'><a id='mode' value='dark'><span class="material-icons">light_mode</span></a></div>
   </div>
   <h1>Numberzilla</h1>
   <div id='startWrapper'>
@@ -33,6 +34,25 @@ savings
   </div>
   <div id='container'></div>
   <div id='pauseMessage'>GAME PAUSED<br><br>Press PLAY to resume</div>
+  <div class='modal' id='rules'>
+    <div class='modal-content'>
+      <a href="#" class="close-modal">&times;</a>
+      <h3>How to play:</h3>
+      <ul>
+        <li>Remove the pairs of the same numbers (3-3, 2-2) or those which add up to 10 (1-9, 2-8). Two numbers can be removed by clicking on them one by one.</li>
+        <li>You can cross out numbers located side by side vertically, horizontally and also, if one number is the last in the row and another is the first in the following row.</li>
+        <li>There can be empty cells between the two numbers.</li>
+        <li>The goal is to remove all pairs and to completely clear the board.</li>
+      </ul>
+    </div>
+  </div>
+  <div  class='modal' id='best'>
+    <div class='modal-content'>
+      <h3>Best scores</h3>
+      <a href="#" class="close-modal">&times;</a>
+      <ul id='highscoreList'></ul>
+    </div>
+  </div>
   <div id='buttonWrapper'>
     <button id='addShuffle'>
       <div id='add'><span class="material-icons">add_box</span><br>Add</div>

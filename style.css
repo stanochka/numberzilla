@@ -8,17 +8,25 @@ body {
   font-family: 'Roboto Mono', monospace;
 }
 
-#modeWrapper {
+#topWrapper {
   width: 98%;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  margin: 15px;
 }
 
-#mode {
-  border: 0;
+a {
   color: #FFF;
-  background: none;
+  text-decoration: none;
   cursor: pointer;
+  padding: 10px;
+}
+
+#modeWrapper {
+  flex-grow: 3;
+  text-align: right;
+  margin: 0;
+  padding: 10px;
 }
 
 #startWrapper {
@@ -103,6 +111,59 @@ body {
   vertical-align: middle;
 }
 
+.modal {
+  visibility: hidden;
+  opacity: 0;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(77, 77, 77, .8);
+  transition: all .2s;
+}
+
+.modal:target {
+  visibility: visible;
+  opacity: 1;
+}
+
+.modal-content {
+  background: #B98EFF;
+  border: 1px solid #000;
+  width: 400px;
+  height: auto;
+  color: #000;
+  text-align: justify;
+  font-size: 1.1em;
+  padding: 30px 30px 30px 0px;
+  margin: 5% auto;
+  position: relative;
+}
+
+.close-modal {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  color: #000;
+  font-size: 2em;
+  text-decoration: none;
+}
+
+.modal-content>h3 {
+  text-align: center;
+}
+
+.modal-content>ul {
+  list-style-type: square;
+}
+
+.modal-content>ul>li {
+  padding-bottom: 15px;
+}
 
 #buttonWrapper {
   margin: 15px;
@@ -121,6 +182,7 @@ body {
   border: 0;
   background: #fff;
   cursor: pointer;
+  z-index: -1;
 }
 
 #add {
@@ -150,12 +212,12 @@ body {
     -webkit-tap-highlight-color: transparent;
   }
 
-  #modeWrapper {
-    margin: 5px 0 -10px;
+  #topWrapper {
+    margin: 5px 0 0;
   }
 
   h1 {
-    margin: 10px;
+    margin: 7px auto;
   }
 
   #startWrapper {
@@ -175,6 +237,11 @@ body {
 
   #container::-webkit-scrollbar {
     display: block;
+  }
+
+  .modal-content {
+    width: 80vw;
+    height: auto;
   }
 
   #buttonWrapper {
