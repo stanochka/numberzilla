@@ -113,6 +113,7 @@ const trackTime = () => {
   function stop() {
     if (confirm('Are you sure you want to stop the game?')) {
       clearInterval(timerInterval);
+      var time = timeToString(elapsedTime);
       alert(`Game over! Your score: ${pointCounter}. Time: ${timeToString(elapsedTime)}.`);
       saveScore();
       clearAll();
@@ -456,14 +457,26 @@ document.addEventListener("visibilitychange", function() {
 const saveScore = () => {
   const savedScores = localStorage.getItem('highscore') || '[]';
   const highscores = [...JSON.parse(savedScores), pointCounter]
-                      .sort((a, b) => b-a)
-                      .slice(0, 5);
+      .sort((a, b) => b-a)
+      .slice(0, 5);
   localStorage.setItem('highscore', JSON.stringify(highscores));
   while (highscoreList.childElementCount > 0) highscoreList.lastElementChild.remove();
-  highscores.foreach(score => {
-    let li = document.createElement("li");
-    li.appendChild(document.createTextNode(score));
-    console.log(li);
-    highScoreList.appendChild(li);
-  });
+  showScores();
 }
+
+const showScores = () => {
+  if (localStorage.getItem('highscore')) {
+    const savedScores = localStorage.getItem('highscore');
+    JSON.parse(savedScores).forEach(score => {
+      let li = document.createElement("li");
+      li.appendChild(document.createTextNode(`-${score}-`));
+      highscoreList.appendChild(li);
+    });
+  } else {
+    let li = document.createElement("li");
+    li.appendChild(document.createTextNode('no records yet'));
+    highscoreList.appendChild(li);
+  }
+}
+
+showScores();

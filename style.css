@@ -141,7 +141,7 @@ a {
   color: #000;
   text-align: justify;
   font-size: 1.1em;
-  padding: 30px 30px 20px 0px;
+  padding: 30px 10px 20px;
   margin: 5% auto;
   position: relative;
 }
@@ -161,10 +161,18 @@ a {
 
 .modal-content>ul {
   list-style-type: square;
+  list-style-position: outside;
+  padding-left: 25px;
+  padding-right: 15px;
 }
 
 .modal-content>ul>li {
   padding-bottom: 15px;
+}
+
+#highscoreList {
+  list-style-type: none;
+  text-align: center;
 }
 
 #buttonWrapper {
