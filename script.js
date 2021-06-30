@@ -115,6 +115,7 @@ const trackTime = () => {
       clearInterval(timerInterval);
       alert(`Game over! Your score: ${pointCounter}. Time: ${timeToString(elapsedTime)}.`);
       saveScore();
+      showButton("PLAY");
       clearAll();
     }
   }
