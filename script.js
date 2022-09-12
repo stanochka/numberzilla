@@ -117,6 +117,7 @@ const trackTime = () => {
       saveScore();
       startButton.addEventListener('click', startGame);
       showButton("PLAY");
+      pauseMessage.style.display = "none";
       clearAll();
     }
   }
