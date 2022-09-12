@@ -111,9 +111,9 @@ const trackTime = () => {
   }
 
   function stop() {
-    if (confirm('Are you sure you want to stop the game?')) {
+    if (confirm('Вы уверены, что хотите завершить игру?')) {
       clearInterval(timerInterval);
-      alert(`Game over! Your score: ${pointCounter}. Time: ${timeToString(elapsedTime)}.`);
+      alert(Игра окончена! Ваш результат: ${pointCounter}. Время: ${timeToString(elapsedTime)}.`);
       saveScore();
       startButton.addEventListener('click', startGame);
       showButton("PLAY");
@@ -154,7 +154,7 @@ const checkProgress = () => {
     document.location.reload();
   };
   if (pointCounter > 0 && matrix.flat().filter(el => el !== null).length === 0) {
-    alert(`You won with score: ${pointCounter}!`)
+    alert(`Поздравляем! Вы выиграли с результатом: ${pointCounter}!`)
   }
 }
 
