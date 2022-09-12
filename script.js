@@ -475,7 +475,7 @@ const showScores = () => {
     });
   } else {
     let li = document.createElement("li");
-    li.appendChild(document.createTextNode('no records yet'));
+    li.appendChild(document.createTextNode('пока нет рекордов'));
     highscoreList.appendChild(li);
   }
 }
