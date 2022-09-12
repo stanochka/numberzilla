@@ -1,6 +1,6 @@
 <!doctype html>
 
-<html lang="en">
+<html lang="ru">
 <head>
   <meta charset="utf-8">
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -27,43 +27,43 @@
     <button id='stop'><span class="material-icons">stop</span></button>
   </div>
   <div id='statusWrapper'>
-    <div id='time'><span class="material-icons">timer</span> Time: <span class="timer">00:00:00</span></div>
+    <div id='time'><span class="material-icons">timer</span> Время: <span class="timer">00:00:00</span></div>
     <div id='points'><span class="material-icons">
 savings
-</span> Points: <span class="pointCounter">0</span></div>
+</span> Очки: <span class="pointCounter">0</span></div>
   </div>
   <div id='container'></div>
-  <div id='pauseMessage'>GAME PAUSED<br><br>Press PLAY to resume</div>
+  <div id='pauseMessage'>ПАУЗА<br><br>Нажмите ▶️, чтобы возобновить игру</div>
   <div class='modal' id='rules'>
     <div class='modal-content'>
       <a href="#" class="close-modal">&times;</a>
-      <h3>How to play:</h3>
+      <h3>Правила игры:</h3>
       <ul>
-        <li>Remove the pairs of the same numbers (3-3, 2-2) or numbers which add up to 10 (1-9, 2-8). Two numbers can be removed by clicking on them one by one.</li>
-        <li>You can remove numbers located side by side vertically, horizontally and also, if one number is the last in the row and another is the first in the following row.</li>
-        <li>There can be empty cells between the two numbers.</li>
-        <li>The goal is to remove all pairs and to completely clear the board.</li>
+        <li>Убирайте пары одинаковых цифр (3-3, 2-2) или пары цифры, которые в сумме составляют 10 (1-9, 2-8). Пару цифр можно удалить, кликнув на них одну за другой.</li>
+        <li>Можно убирать цифры, расположенные на соседних клетках вертикально, горизонтально или если одна цифра стоит последней в ряду, а вторая первой в следующем ряду.</li>
+        <li>Между двумя цифрами могут быть пустые клетки.</li>
+        <li>Цель игры - убрать все цифры и полностью очистить доску. </li>
       </ul>
     </div>
   </div>
   <div  class='modal' id='best'>
     <div class='modal-content'>
-      <h3>Your best scores:</h3>
+      <h3>Рекорды:</h3>
       <a href="#" class="close-modal">&times;</a>
       <ul id='highscoreList'></ul>
     </div>
   </div>
   <div id='buttonWrapper'>
     <button id='addShuffle'>
-      <div id='add'><span class="material-icons">add_box</span><br>Add</div>
-      <div id='shuffle'><span class="material-icons">loop</span><br>Shuffle</div>
+      <div id='add'><span class="material-icons">add_box</span><br>Добавить</div>
+      <div id='shuffle'><span class="material-icons">loop</span><br>Перемешать</div>
     </button>
     <button id='hint'><div><span class="material-icons">
 lightbulb
 </span><br>Hint</div></button>
     <button id='undo'><div><span class="material-icons">
 undo
-</span><br>Undo</div></button>
+</span><br>Отменить</div></button>
   </div>
 
   <script src="smoothscroll.min.js"></script>
