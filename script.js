@@ -418,7 +418,7 @@ const getHint = () => {
     setTimeout(() => { points.textContent = pointCounter; }, 400);
     checkProgress();
   }
-  else alert('No possible matches! Add more numbers or shuffle')
+  else alert('Нет доступных пар! Добавьте цифры или перемешайте')
 
   function showHint() {
     const divs = document.querySelectorAll('#container>div');
