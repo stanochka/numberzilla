@@ -113,7 +113,7 @@ const trackTime = () => {
   function stop() {
     if (confirm('Вы уверены, что хотите завершить игру?')) {
       clearInterval(timerInterval);
-      alert(Игра окончена! Ваш результат: ${pointCounter}. Время: ${timeToString(elapsedTime)}.`);
+      alert(`Игра окончена! Ваш результат: ${pointCounter}. Время: ${timeToString(elapsedTime)}.`);
       saveScore();
       startButton.addEventListener('click', startGame);
       showButton("PLAY");
