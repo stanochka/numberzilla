@@ -150,7 +150,7 @@ const clearAll = () => {
 
 const checkProgress = () => {
   if (pointCounter < 0) {
-    alert('Game over! You lost all the points');
+    alert('Игра окончена! Вы потеряли все очки');
     document.location.reload();
   };
   if (pointCounter > 0 && matrix.flat().filter(el => el !== null).length === 0) {
@@ -443,7 +443,7 @@ const undoStep = () => {
     setTimeout(() => { points.textContent = pointCounter; }, 400);
     checkProgress();
     doStep();
-  } else alert('You cannot undo!')
+  } else alert('Нельзя отменить!')
 }
 
 mode.addEventListener('click', changeMode);
@@ -475,7 +475,7 @@ const showScores = () => {
     });
   } else {
     let li = document.createElement("li");
-    li.appendChild(document.createTextNode('пока нет рекордов'));
+    li.appendChild(document.createTextNode('Пока нет рекордов'));
     highscoreList.appendChild(li);
   }
 }
