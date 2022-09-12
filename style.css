@@ -13,7 +13,7 @@ body {
   width: 98%;
   display: flex;
   justify-content: space-between;
-  margin: 15px;
+  margin: 0;
 }
 
 a {
@@ -30,6 +30,10 @@ a {
   padding: 10px;
 }
 
+h1 {
+  margin: -10px 0 15px;
+}
+
 #startWrapper {
   margin: -10px auto 15px;
   display: flex;
@@ -39,9 +43,9 @@ a {
 }
 
 #startWrapper>button {
-  width: 50px;
+  width: 35px;
   height: 35px;
-  border-radius: 20%;
+  border-radius: 15%;
   border: 0;
   background: #fff;
   cursor: pointer;
@@ -64,7 +68,7 @@ a {
   width: 360px;
   display: flex;
   justify-content: space-around;
-  margin: 10px;
+  margin: 0;
 }
 
 #statusWrapper>div>span {
@@ -74,10 +78,10 @@ a {
 #container {
   display: grid;
   grid-template-columns: repeat(9, 1fr);
-  width: 360px;
-  height: 360px;
+  width: 333px;
+  height: 333px;
   margin: 15px;
-  border: 1px solid #FFF;
+  border: 0px solid #FFF;
   overflow-x: hidden;
   overflow-y: auto;
 }
@@ -87,9 +91,9 @@ a {
 }
 
 #container>div {
-  width: 38px;
-  height: 38px;
-  font-size: 2em;
+  width: 35px;
+  height: 35px;
+  font-size: 1.8em;
   text-align: center;
 }
 
@@ -176,7 +180,7 @@ a {
 }
 
 #buttonWrapper {
-  margin: 15px;
+  margin: 0px;
   display: flex;
   width: 360px;
   justify-content: space-around;
@@ -185,14 +189,15 @@ a {
 
 #buttonWrapper>button {
   margin: 10px;
-  padding: 15px;
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
+  padding: 10px;
+  width: 60px;
+  height: 60px;
+  border-radius: 15%;
   border: 0;
   background: #fff;
   cursor: pointer;
   z-index: 1;
+  font-size: 0.55em;
 }
 
 #add {
