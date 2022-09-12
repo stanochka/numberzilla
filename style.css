@@ -81,10 +81,10 @@ a {
   overflow-x: hidden;
   overflow-y: auto;
 }
-/*
+
 #container::-webkit-scrollbar {
   display: none;
-}*/
+}
 
 #container>div {
   width: 38px;
