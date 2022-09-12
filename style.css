@@ -81,7 +81,7 @@ h1 {
   width: 333px;
   height: 333px;
   margin: 15px;
-  border: 0px solid #FFF;
+  border: 1px solid #FFF;
   overflow-x: hidden;
   overflow-y: auto;
 }
